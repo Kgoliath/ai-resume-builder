@@ -1,4 +1,8 @@
 // backend/server.js - COMPLETE FIXED VERSION
+global.fetch = require('node-fetch');
+global.Headers = require('node-fetch').Headers;
+global.Request = require('node-fetch').Request;
+global.Response = require('node-fetch').Response;
 const express = require('express');
 const cors = require('cors');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -212,7 +216,9 @@ app.get('/health', (req, res) => {
     status: 'OK', 
     message: 'Server is running smoothly',
     timestamp: new Date().toISOString(),
-    aiStatus: process.env.GOOGLE_AI_API_KEY ? 'API Key Configured' : 'API Key Missing'
+    aiStatus: process.env.GOOGLE_AI_API_KEY ? 'API Key Configured' : 'API Key Missing',
+    aiKeyLength: process.env.GOOGLE_AI_API_KEY ? process.env.GOOGLE_AI_API_KEY.length : 0,
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
