@@ -42,6 +42,11 @@ try {
   console.error('Google AI initialization failed:', error.message);
 }
 
+app.options('/api/generate', cors());
+app.options('/api/analyze-ats', cors());
+app.options('/api/feedback', cors());
+
+
 // POST endpoint for AI content generation
 app.post('/api/generate', async (req, res) => {
   // Declare variables here so they're available in catch block
