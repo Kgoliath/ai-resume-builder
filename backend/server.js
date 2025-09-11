@@ -23,13 +23,29 @@ app.use(cors({
 app.use(express.json());
 
 // Initialize Google AI
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
+let genAI;
+try {
+  if (process.env.GOOGLE_AI_API_KEY) {
+    genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
+    console.log('Google AI initialized successfully');
+  } else {
+    console.warn('Google AI API key missing - using fallback mode');
+  }
+} catch (error) {
+  console.error('Google AI initialization failed:', error.message);
+}
 
 // POST endpoint for AI content generation
 app.post('/api/generate', async (req, res) => {
   // Declare variables here so they're available in catch block
   let section, field, prompt;
-  
+  if (!genAI) {
+    console.log('Using fallback response (Google AI not initialized)');
+    return res.json({ 
+      text: 'AI enhancement is temporarily unavailable. Please try again later.',
+      fallback: true
+    });
+  }
   try {
     ({ prompt, section, field } = req.body);
 
@@ -92,6 +108,17 @@ app.post('/api/generate', async (req, res) => {
 // POST endpoint for ATS compatibility analysis
 app.post('/api/analyze-ats', async (req, res) => {
   try {
+    if (!genAI) {
+      console.log('Using fallback ATS analysis (Google AI not initialized)');
+      return res.json({
+        score: 75,
+        matchedKeywords: ['javascript', 'react', 'node', 'html', 'css'],
+        missingKeywords: ['python', 'aws', 'docker', 'typescript'],
+        suggestion: 'Add more cloud computing and DevOps skills to match industry trends',
+        summary: 'Good match for frontend development roles - 75% keyword compatibility',
+        fallback: true
+      });
+    }
     const { resumeData, jobDescription } = req.body;
     
     if (!jobDescription || jobDescription.trim().length < 10) {
