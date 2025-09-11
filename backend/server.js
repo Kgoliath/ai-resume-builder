@@ -7,12 +7,25 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
+const allowedOrigins = [
+  'https://ai-resume-builder-phi-nine.vercel.app',
+  'http://localhost:5173'
+];
+
 // Middleware - UPDATED CORS CONFIGURATION
 // Middleware - SIMPLIFIED CORS CONFIGURATION
 app.use(cors({
-    origin: 'https://ai-resume-builder-phi-nine.vercel.app',
-    credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+app.options('*', cors());
 
 app.use(express.json());
 
