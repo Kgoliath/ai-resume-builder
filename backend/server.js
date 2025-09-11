@@ -8,21 +8,18 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware - UPDATED CORS CONFIGURATION
+// Middleware - SIMPLIFIED CORS CONFIGURATION
 app.use(cors({
     origin: [
         'https://ai-resume-builder-phi-nine.vercel.app',
         'http://localhost:5173', 
-        'http://localhost:3000',
-        'https://ai-resume-builder.com',
-        'https://www.ai-resume-builder.com'
+        'http://localhost:3000'
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.options('*', cors()); // Enable preflight for all routes
+//app.options('*', cors()); // Enable preflight for all routes
 app.use(express.json());
 
 // Initialize Google AI
