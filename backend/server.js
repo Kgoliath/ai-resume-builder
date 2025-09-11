@@ -10,16 +10,19 @@ const port = process.env.PORT || 5000;
 // Middleware - UPDATED CORS CONFIGURATION
 app.use(cors({
     origin: [
-        'https://ai-resume-builder-phi-nine.vercel.app', // Your Vercel frontend
-        'http://localhost:5173', // Vite dev server
-        'http://localhost:3000', // Alternative dev port
-        'https://ai-resume-builder.com', // Your custom domain (when ready)
-        'https://www.ai-resume-builder.com' // WWW version
+        'https://ai-resume-builder-phi-nine.vercel.app',
+        'http://localhost:5173', 
+        'http://localhost:3000',
+        'https://ai-resume-builder.com',
+        'https://www.ai-resume-builder.com'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
+app.options('*', cors()); // Enable preflight for all routes
 app.use(express.json());
 
 // Initialize Google AI
