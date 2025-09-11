@@ -7,8 +7,19 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware - UPDATED CORS CONFIGURATION
+app.use(cors({
+    origin: [
+        'https://ai-resume-builder-phi-nine.vercel.app', // Your Vercel frontend
+        'http://localhost:5173', // Vite dev server
+        'http://localhost:3000', // Alternative dev port
+        'https://ai-resume-builder.com', // Your custom domain (when ready)
+        'https://www.ai-resume-builder.com' // WWW version
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Initialize Google AI
