@@ -34,6 +34,7 @@ function AISuggestionButton({ currentText, section, fieldName, onSuggestionGener
     const data = await response.json();
     if (data.text) {
       onSuggestionGenerated(data.text);
+      setLastSuggestion(data.text);
     } else if (data.error) {
       setError(data.error);
     }
